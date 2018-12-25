@@ -2,6 +2,7 @@ import java.util.Scanner;
 public class LasDamas extends JuegoDeMesa{
 	int auxBlancas = 8;
 	int auxNegras = 8;
+	int turnoSinComer = 0;
 	Scanner teclado = new Scanner (System.in);
 	
 	public LasDamas(){
@@ -10,7 +11,7 @@ public class LasDamas extends JuegoDeMesa{
 
 	public void jugar(){
 		int numTurnos= 1;
-		while((auxNegras>0) || (auxBlancas>0)){
+		while((auxNegras>0) && (auxBlancas>0) && (turnoSinComer>20)){
 			mostrar();
 			int auxNumTurnos = 0;
 			if ((numTurnos % 2) != 0) {
@@ -47,7 +48,10 @@ public class LasDamas extends JuegoDeMesa{
 						orientacionNum = pedirDireccion();
 
 						boolean pudoMover = mover(x, y, orientacionNum, 1);
-						if (pudoMover) resultado = 1;
+						if (pudoMover) {
+							resultado = 1;
+							turnoSinComer++;
+						} else turnoSinComer= 0;
 					} else {
 						if (tablero [x][y]==EstadoTablero.N){
 							coordenada = pedirCoordenadas("Senala la coordenada de destino: ");
@@ -55,7 +59,10 @@ public class LasDamas extends JuegoDeMesa{
 							yDest = obtenerCoorY(coordenada);
 
 							boolean pudoMoverSinComer = moverDama(x, xDest, y, yDest);
-							if (pudoMoverSinComer) resultado = 1;
+							if (pudoMoverSinComer){
+								resultado = 1;
+								turnoSinComer++;
+							} else turnoSinComer= 0;
 						} else System.out.println("Tienes que mover las fichas negras"); //Se puede colocar como un error
 					}
 				} else { 
@@ -63,7 +70,10 @@ public class LasDamas extends JuegoDeMesa{
 						orientacionNum = pedirDireccion();
 
 						boolean pudoMover = mover(x, y, orientacionNum, 0);
-						if (pudoMover) resultado = 1;
+						if (pudoMover)  {
+							resultado = 1;
+							turnoSinComer++;
+						} else turnoSinComer= 0;
 					} else {
 						if (tablero [x][y]==EstadoTablero.B){
 							coordenada = pedirCoordenadas("Senala la coordenada de destino: ");
@@ -71,7 +81,10 @@ public class LasDamas extends JuegoDeMesa{
 							yDest = obtenerCoorY(coordenada);
 
 							boolean pudoMoverSinComer = moverDama(x, xDest, y, yDest);
-							if (pudoMoverSinComer) resultado = 1;
+							if (pudoMoverSinComer){
+								resultado = 1;
+								turnoSinComer++;
+							} else turnoSinComer= 0;;
 						} else System.out.println("Tienes que mover las fichas Blancas");
 					}
 				}
