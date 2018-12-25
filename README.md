@@ -1,6 +1,8 @@
 # LasDamasEspanolas
 ## Descripción y contexto 
-Programa que permite jugar al juego de las damas espanolas bajo las siguientes reglas:
+Programa que permite jugar al juego de las damas espanolas  a través del terminal de un ordenador mediante ProgramasLasDamas.java.
+
+El juego se desarrolla bajo las siguientes reglas:
 
 #### 1. Tablero: 
 > Tamano de 8x8 con esquina inferior derecha de color blanco. 12 peones por jugador (blancos y negros respectivamente para cada uno de ellos) situados sobre las casillas blancas de las tres primeras filas de cada jugador. El juego se desarrolla por lo tanto sólo sobre las casillas blancas.
