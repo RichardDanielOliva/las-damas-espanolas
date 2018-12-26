@@ -25,18 +25,30 @@ Richard Daniel Oliva Denis. danielolivadenis@gmail.com
 
 ## Diagrama de flujo
 
-<img src="/images/DFLasDamas.png" alt="DFJugar" width="400"/>
+<img src="/images/DFLasDamas.png" alt="DFLasDamas" width="400"/>
 
 ## Imagenes
 
 #### Tablero:
 
+<img src="/images/tablero.png" alt="tablero" width="400"/>
+
 #### Mover peon:
+
+<img src="/images/moverPeon.png" alt="moverPeon" width="400"/>
 
 #### Comer con peon:
 
+<img src="/images/comerPeon.png" alt="comerPeon" width="400"/>
+
 #### Comer doble con peon:
+
+<img src="/images/comerDoblePeon.png" alt="comerDoblePeon" width="400"/>
 
 #### Convertir peon a dama:
 
+<img src="/images/convertirPeonADama.png" alt="convertirPeonADama" width="400"/>
+
 #### Comer con dama:
+
+<img src="/images/moverDama.png" alt="moverDama" width="400"/>
