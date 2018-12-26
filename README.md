@@ -51,4 +51,4 @@ Richard Daniel Oliva Denis. danielolivadenis@gmail.com
 
 #### Comer con dama:
 
-<img src="/images/moverDama.png" alt="moverDama" width="400"/>
+<img src="/images/moverDama.png" alt="moverDama" width="300"/>
