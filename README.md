@@ -22,3 +22,21 @@ El juego se desarrolla bajo las siguientes reglas:
 
 ## Autor/es
 Richard Daniel Oliva Denis. danielolivadenis@gmail.com
+
+## Diagrama de flujo
+
+<img src="/images/DFLasDamas.png" alt="DFJugar" width="400"/>
+
+## Imagenes
+
+#### Tablero:
+
+#### Mover peon:
+
+#### Comer con peon:
+
+#### Comer doble con peon:
+
+#### Convertir peon a dama:
+
+#### Comer con dama:
