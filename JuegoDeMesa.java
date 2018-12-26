@@ -1,7 +1,7 @@
 public abstract class JuegoDeMesa{
-
 	protected EstadoTablero [][] tablero;
 	protected final int TAMANOTABLERO = 8;
+	protected int auxBlancas, auxNegras;
 
 	public void mostrar(){
 		char auxChar= 'A';
@@ -22,9 +22,14 @@ public abstract class JuegoDeMesa{
 
 	public void inicializar(){
 		tablero = new EstadoTablero [TAMANOTABLERO][TAMANOTABLERO];
+		auxBlancas = 8;
+		auxNegras = 8;
+
 		inicializarVacio();
 		posicionarBlancas();
 		posicionarNegras();
+
+
 	}
 
 	public void inicializarVacio(){

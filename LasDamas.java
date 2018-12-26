@@ -1,90 +1,86 @@
 import java.util.Scanner;
 public class LasDamas extends JuegoDeMesa{
-	int auxBlancas = 8;
-	int auxNegras = 8;
-	int turnoSinComer = 0;
+
 	Scanner teclado = new Scanner (System.in);
 	
 	public LasDamas(){
 		inicializar();
 	}
 
-	public void jugar(){
+	/*
+	//jugar(): Metodo que controla el turno de cada jugador. Las blancas juegan en turnos impares mientras las negras lo hacen en multiplos de dos. 
+	El metodo jugarTurno() regresa un valor determinado. Si este es 0 implica que puede volver a comer, si es 1 el toca al siguiente jugador
+	*/
+	public void jugar(){ 
+		int turnoSinComer = 0;
 		int numTurnos= 1;
-		while((auxNegras>0) && (auxBlancas>0) && (turnoSinComer>20)){
+
+		while((auxNegras>0) && (auxBlancas>0) && (turnoSinComer<20)){
 			mostrar();
+
 			int auxNumTurnos = 0;
 			if ((numTurnos % 2) != 0) {
 				auxNumTurnos = jugarTurno("Juegan Blancas", numTurnos);
 			} else {
 				auxNumTurnos = jugarTurno("Juegan negras", numTurnos);
 			}
+
 			convertirADama();
+			if (auxNumTurnos == 1) turnoSinComer++;
+				else turnoSinComer = 0;
+
 			numTurnos+= auxNumTurnos;
 		}
 	}
 
+	/*
+	//jugarTurno() Interactua con el usuario pidiendole la ficha y el movimiento a realizar. 
+	Diferencia entre ambos jugadores (blancas o negras) y el tipo de ficha (peon o dama)
+	*/
 	public int jugarTurno(String quienJuega, int numTurnos){
-		int x;
-		int y;
-		int xDest;
-		int yDest;
-		int orientacionNum;
+		int x, y, xDest, yDest, orientacionNum, auxcoordenada;
 		String coordenada;
-		int auxcoordenada;
+		boolean puedeVolverAComer;
 		int resultado = 0;
 
-		System.out.println(quienJuega);
-			if (numTurnos>1) coordenada = pedirCoordenadas(" ");
-			coordenada = pedirCoordenadas("Senala la coordenada de la ficha: ");
-				
-			x = coordenada.charAt(0) - 'A';;
-			y = obtenerCoorY(coordenada);
 
+		System.out.println(quienJuega);
+			if (numTurnos>1) coordenada = pedirCoordenadas(" "); // If sirve de auxiliar para poder jugar en el terminal del ordenador
+
+			coordenada = pedirCoordenadas("Senala la coordenada de la ficha: ");
+			x = coordenada.charAt(0) - 'A';
+			y = obtenerCoorY(coordenada);
 
 			try{
 				if ((numTurnos % 2) == 0) {
 					if (tablero [x][y]==EstadoTablero.n) {
 						orientacionNum = pedirDireccion();
+						puedeVolverAComer = moverPeon(x, y, orientacionNum, 1);
+						if (puedeVolverAComer) resultado = 1;
 
-						boolean pudoMover = mover(x, y, orientacionNum, 1);
-						if (pudoMover) {
-							resultado = 1;
-							turnoSinComer++;
-						} else turnoSinComer= 0;
 					} else {
 						if (tablero [x][y]==EstadoTablero.N){
 							coordenada = pedirCoordenadas("Senala la coordenada de destino: ");
 							xDest = coordenada.charAt(0) - 'A';
 							yDest = obtenerCoorY(coordenada);
-
-							boolean pudoMoverSinComer = moverDama(x, xDest, y, yDest);
-							if (pudoMoverSinComer){
-								resultado = 1;
-								turnoSinComer++;
-							} else turnoSinComer= 0;
+							puedeVolverAComer = moverDama(x, xDest, y, yDest);
+							if (!puedeVolverAComer) resultado = 1;
 						} else System.out.println("Tienes que mover las fichas negras"); //Se puede colocar como un error
 					}
+
 				} else { 
 					if (tablero [x][y]==EstadoTablero.b) {
 						orientacionNum = pedirDireccion();
+						puedeVolverAComer = moverPeon(x, y, orientacionNum, 0);
+						if (puedeVolverAComer) resultado = 1;
 
-						boolean pudoMover = mover(x, y, orientacionNum, 0);
-						if (pudoMover)  {
-							resultado = 1;
-							turnoSinComer++;
-						} else turnoSinComer= 0;
 					} else {
 						if (tablero [x][y]==EstadoTablero.B){
 							coordenada = pedirCoordenadas("Senala la coordenada de destino: ");
 							xDest = coordenada.charAt(0) - 'A';
 							yDest = obtenerCoorY(coordenada);
-
-							boolean pudoMoverSinComer = moverDama(x, xDest, y, yDest);
-							if (pudoMoverSinComer){
-								resultado = 1;
-								turnoSinComer++;
-							} else turnoSinComer= 0;;
+							puedeVolverAComer = moverDama(x, xDest, y, yDest);
+							if (!puedeVolverAComer) resultado = 1;
 						} else System.out.println("Tienes que mover las fichas Blancas");
 					}
 				}
@@ -94,27 +90,7 @@ public class LasDamas extends JuegoDeMesa{
 		return resultado;
 	}
 
-	private String pedirCoordenadas(String mensaje){
-		String resultado;
-		if (mensaje.length()>1) System.out.println(mensaje);
-		resultado = teclado.nextLine();
-		resultado = resultado.toUpperCase();
-		return resultado;
-	}
-
-	private int obtenerCoorY(String coordenada){
-		String auxResultado = coordenada.substring(1);
-		int resultado = Integer.parseInt(auxResultado);
-		return resultado;
-	}
-
-	private int pedirDireccion(){
-		System.out.println("Senala hacia donde quieres moverla 1.izquierda 2.Derecha: ");
-		int resultado = teclado.nextInt();
-		return resultado;
-	}
-
-	public boolean mover(int x, int y, int orientacionNum, int colorFicha) throws NoSePuedeMover{ //podemos unir moverBlancas y moverNegras
+	public boolean moverPeon(int x, int y, int orientacionNum, int colorFicha) throws NoSePuedeMover{ //podemos unir moverBlancas y moverNegras
 		int posProximaX = 0;
 		int posProximaY = 0;
 		int posProximaAuxX = 0;
@@ -149,7 +125,7 @@ public class LasDamas extends JuegoDeMesa{
 					}
 		}
 
-		if (noSalesDelTablero(x, y, posProximaX, posProximaY))
+		if (saleDelTablero(x, y, posProximaX, posProximaY))
 			throw new NoSePuedeMover("Te estas saliendo del tablero");
 
 		if (posicionOcupada(x, y, posProximaX, posProximaY))
@@ -159,52 +135,97 @@ public class LasDamas extends JuegoDeMesa{
 			tablero[x + posProximaX][y + posProximaY] = tablero[x][y];
 			tablero[x][y] = EstadoTablero.V;
 			resultado = true;
+
 		} else {
-			if (noPuedesComer(x, y, (2*posProximaX), (2*posProximaY)))
+			if (!noPuedesComer(x, y, (2*posProximaX), (2*posProximaY)))
 				throw new NoSePuedeMover("Posicion no valida");
-			comer(x,y, posProximaX, posProximaY, tablero[x][y]);
+			comer(x,y, posProximaX, posProximaY);
 			tablero[x][y] = EstadoTablero.V;
-			if (noPuedesComerNuevamente(x + (2*posProximaX), y + (2*posProximaY), colorFicha)) 
+
+			if (noPuedesComerNuevamente(x + 2*posProximaX, y + 2*posProximaY, posProximaX, posProximaY, posProximaAuxX, posProximaAuxY)) 
 				resultado = true;
 		}
 		return resultado;
 	}
 
-	public boolean noPuedesComerNuevamente(int x, int y, int colorFicha){
-		int posProximaX = 0;
-		int posProximaY = 0;
-		int posProximaAuxX = 0;
-		int posProximaAuxY = 0;
+	public boolean noPuedesComerNuevamente(int x, int y, int posProximaX, int posProximaY, int posProximaAuxX, int posProximaAuxY){
 		boolean resultado = false;
 
-		switch (colorFicha){
-			case 0: posProximaX = 1;
-					posProximaY = -1;
-					posProximaAuxX = 1;
-					posProximaAuxY = 1;
-					break;
-			case 1: posProximaX = -1;
-					posProximaY = -1;
-					posProximaAuxX = -1;
-					posProximaAuxY = 1;
-					break;	
+		if (saleDelTablero(x, y, posProximaX, posProximaY)) {
+			posProximaX = x;
+			posProximaY = y;
 		}
-
-		if (!noSalesDelTablero(x, y, posProximaX, posProximaY) || !noSalesDelTablero(x, y, posProximaAuxX, posProximaAuxY)) {
-			if (!posicionOcupada(x, y, posProximaX, posProximaY) || !posicionOcupada(x, y, posProximaAuxX, posProximaAuxY)) {
-				if(noPuedesComer(x, y, 2*posProximaX, 2*posProximaY) && noPuedesComer(x, y, 2*posProximaAuxX, 2*posProximaAuxY))
-					resultado = true;
+		if (saleDelTablero(x, y, posProximaAuxX, posProximaAuxY)) {
+			posProximaAuxX = x;
+			posProximaAuxY = y;
+		}
+		if (tablero[x][y] != EstadoTablero.N && tablero[x][y] != EstadoTablero.B) {
+			if (posicionValida(x, y, posProximaX, posProximaY) || posicionValida(x, y, posProximaAuxX, posProximaAuxY)) {
+				if(noPuedesComer(x, y, 2*posProximaX, 2*posProximaY) || noPuedesComer(x, y, 2*posProximaAuxX, 2*posProximaAuxY)){
+				} else resultado = true;
 			} else resultado = true;
-		} else resultado = true;
+		} else resultado = true; //Aqui debemos colocar el metodo que comprueba si la dama puede volver a comer
+
 		return resultado;
 	}
 
-	public void comer(int x, int y, int posProximaX, int posProximaY, EstadoTablero a){
+	public boolean saleDelTablero(int x, int y, int posProximaX, int posProximaY){
+		return ((x + posProximaX) >= TAMANOTABLERO) || //crear metodo, empleamos dos veces
+			((x + posProximaX) < 0) ||
+			((y + posProximaY) >= TAMANOTABLERO) ||
+			((y + posProximaY) < 0);
+	}
+
+	public boolean posicionValida(int x, int y, int posProximaX, int posProximaY){
+		boolean resultado = false;
+		if (tablero[x+posProximaX][y+posProximaY] != tablero[x][y] && tablero[x+posProximaX][y+posProximaY] != EstadoTablero.V)
+			resultado = true;
+
+		return resultado;
+	}
+
+	public boolean posicionOcupada(int x, int y, int posProximaX, int posProximaY){
+		boolean resultado = false;
+		if (tablero[x+posProximaX][y+posProximaY] == tablero[x][y])
+			resultado = true;
+		return resultado;
+	}
+
+	public boolean noPuedesComer(int x, int y, int posProximaX2, int posProximaY2){
+		boolean resultado = true;
+		if (saleDelTablero(x, y, posProximaX2, posProximaY2)) resultado = false;
+			else if (tablero[x+posProximaX2][y+posProximaY2] != EstadoTablero.V)
+				resultado = false;
+		return resultado;
+	}
+	
+
+	private String pedirCoordenadas(String mensaje){
+		String resultado;
+		if (mensaje.length()>1) System.out.println(mensaje);
+		resultado = teclado.nextLine();
+		resultado = resultado.toUpperCase();
+		return resultado;
+	}
+
+	private int obtenerCoorY(String coordenada){
+		String auxResultado = coordenada.substring(1);
+		int resultado = Integer.parseInt(auxResultado);
+		return resultado;
+	}
+
+	private int pedirDireccion(){
+		System.out.println("Senala hacia donde quieres moverla 1.izquierda 2.Derecha: ");
+		int resultado = teclado.nextInt();
+		return resultado;
+	}
+
+	public void comer(int x, int y, int posProximaX, int posProximaY){
 		if (!(((x + posProximaX) >= TAMANOTABLERO) ||
 			((x + posProximaX) < 0) ||
 			((y + posProximaY) >= TAMANOTABLERO) ||
 			((y + posProximaY) < 0))){
-			tablero[x + 2*posProximaX][y + 2*posProximaY] = a;
+			tablero[x + 2*posProximaX][y + 2*posProximaY] = tablero[x][y];
 			tablero[x + posProximaX][y + posProximaY] = EstadoTablero.V;
 		} else {
 			tablero[x + posProximaX][y + posProximaY] = tablero[x + posProximaX][y + posProximaY];
@@ -314,26 +335,4 @@ public class LasDamas extends JuegoDeMesa{
 		return resultado;
 	}
 
-	public boolean noSalesDelTablero(int x, int y, int posProximaX, int posProximaY){
-		return ((x + posProximaX) >= TAMANOTABLERO) || //crear metodo, empleamos dos veces
-			((x + posProximaX) < 0) ||
-			((y + posProximaY) >= TAMANOTABLERO) ||
-			((y + posProximaY) < 0);
-	}
-
-	public boolean posicionOcupada(int x, int y, int posProximaX, int posProximaY){
-		boolean resultado = false;
-		if (tablero[x+posProximaX][y+posProximaY] == tablero[x][y])
-			resultado = true;
-		return resultado;
-	}
-
-	public boolean noPuedesComer(int x, int y, int posProximaX2, int posProximaY2){
-		boolean resultado = false;
-		if (noSalesDelTablero(x, y, posProximaX2, posProximaY2)) resultado = true;
-			else if (tablero[x+posProximaX2][y+posProximaY2] != EstadoTablero.V)
-			resultado = true;
-		return resultado;
-	}
-	
 }
