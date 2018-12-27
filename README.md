@@ -10,15 +10,15 @@ El juego se desarrolla bajo las siguientes reglas:
 > Avanzan y capturan en diagonal sólo hacia adelante y sólo en avance de una casilla.
 #### 3. Captura de peones:
 > No hay obligacion de captura.
-> Es posible enlazar la captura de varias piezas en el mismo turno, por lo cual, si existe la posibilidad, el turno del jugador se metiene (ver imagen X).
+> Es posible enlazar la captura de varias piezas en el mismo turno, por lo cual, si existe la posibilidad, el turno del jugador se metiene.
 #### 4. Movimiento de las damas:
 > Tanto para desplazarse como para realizar capturas, avanzan el número de casillas que se desee tanto hacia delante como hacia atrás, siempre en diagonal.
 #### 5. Captura de peones con una dama:
-> Es posible realizar multiples capturas si ellas se encuentran en la diagonal de la dama (ver imagen X)
+> Es posible realizar multiples capturas si ellas se encuentran en la diagonal de la dama
 #### 6. La partida acaba en los siguientes casos:
 > 6.1 Cuando algun jugador se quede sin peones o damas
 
-> 6.2 Cuando cada jugador haya efectuado 20 movimientos de dama(s) sin que ninguno de los bandos haya efectuado un movimiento de peón, captura o entrega de pieza se decretará tablas.
+> 6.2 Cuando cada jugador haya efectuado 20 movimientos de dama/peon(s) sin que ninguno de los bandos haya efectuado una captura o entrega de pieza se decretará tablas.
 
 ## Autor/es
 Richard Daniel Oliva Denis. danielolivadenis@gmail.com
